@@ -1,0 +1,26 @@
+.light {
+  border-radius: 50%;
+  vertical-align: middle;
+  border: 1vh solid black;
+  margin-left: 33vh;
+  display: table;
+  margin: 0;
+  max-width: none;
+  width: 30vh;
+  height: 30vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#red {
+  background-color: #FF0000;
+}
+
+#yellow {
+  background-color: #FFFF00;
+}
+
+#green {
+  background-color: #00FF00;
+}

@@ -4,6 +4,13 @@ function validate(c)
     return c == "green" or c == "yellow" or c == "red"
 end
 
+function sendFile(filename, client)
+    local f = file.open(filename,"r")
+    client:send(file.read())
+    file.close()
+    return
+end
+
 function M.handle(client, request)
     package.loaded[module]=nil
 
@@ -18,25 +25,23 @@ function M.handle(client, request)
         end
     end
 
-    local color = string.match(path,"/(%w+)")
-    
+    local color = string.match(request,"/(%?c=%w+)")
+    if (color ~= nil) then
+      color = string.match(color,"(=%w+)")
+      color = string.match(color,"(%w+)")
+    end
+
     if color then
         color = string.lower(color)
     else
         color = ""
     end
 
-    if method == "GET" and validate(color) then
-        local buf = "HTTP/1.1 200 OK\n\n"
-        buf = buf .. "Setting light to " .. color .. "\n"
-
-        client:send(buf)
+    if method == "GET" and path == "/" then
+        sendFile("index.html", client)
         return 200, method, color
-    elseif method == "GET" and path == "/" then
-        local buf = "HTTP/1.1 200 OK\n\n"
-        buf = buf .. "nodemcu ok\n" 
-
-        client:send(buf)
+    elseif method == "GET" and path == "/styles.css" then
+        sendFile("styles.css", client)
         return 200, method, color
     else
         local buf = "HTTP/1.1 400 Bad Request\n\n"
